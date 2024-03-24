@@ -16,7 +16,7 @@ class TestLeafNode(unittest.TestCase):
         )
 
     def test_to_html_no_tag(self):
-        node = LeafNode(value="Grapes!")
+        node = LeafNode(None, "Grapes!")
         self.assertEqual(
             node.to_html(),
             "Grapes!"
