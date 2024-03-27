@@ -37,3 +37,24 @@ def text_node_to_html_node(text_node: TextNode):
     else:
         raise Exception(f"Unknown text type: {text_node.text_type}")
     
+def split_nodes_delimiter(old_nodes: list[TextNode], delimiter, text_type):
+    new_nodes = []
+    for old_node in old_nodes:
+        if old_node.text_type != text_type_text:
+            new_nodes.append(old_node)
+            continue
+        split_old_nodes = old_node.text.split(delimiter)
+        split_nodes = []
+        if len(split_old_nodes) % 2 == 0:
+            raise ValueError("Invalid Markdown syntax, imbalanced section")
+        for i in range(len(split_old_nodes)):
+            if split_old_nodes[i] == "":
+                continue
+            if i % 2 == 0:
+                split_nodes.append(TextNode(split_old_nodes[i], text_type_text))
+            else:
+                split_nodes.append(TextNode(split_old_nodes[i], text_type))
+        new_nodes.extend(split_nodes)
+    return new_nodes
+
+        
