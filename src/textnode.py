@@ -73,10 +73,14 @@ def split_nodes_image(old_nodes: list[TextNode]):
         text_left = old_node.text
         for img_tup in images:
             split_text = text_left.split(f"![{img_tup[0]}]({img_tup[1]})", 1)
+            if len(split_text) != 2:
+                raise ValueError("Invalid markdown, image section not closed")
             if split_text[0] != "":
                 new_nodes.append(TextNode(split_text[0], text_type_text))
             new_nodes.append(TextNode(img_tup[0], text_type_image, img_tup[1]))
             text_left = split_text[1]
+        if text_left != "":
+            new_nodes.append(TextNode(text_left, text_type_text))
     return new_nodes
 
 def split_nodes_link(old_nodes: list[TextNode]):
@@ -94,8 +98,12 @@ def split_nodes_link(old_nodes: list[TextNode]):
         text_left = old_node.text
         for link_tup in links:
             split_text = text_left.split(f"[{link_tup[0]}]({link_tup[1]})", 1)
+            if len(split_text) != 2:
+                raise ValueError("Invalid markdown, link section not closed")
             if split_text[0] != "":
                 new_nodes.append(TextNode(split_text[0], text_type_text))
             new_nodes.append(TextNode(link_tup[0], text_type_link, link_tup[1]))
             text_left = split_text[1]
+        if text_left != "":
+            new_nodes.append(TextNode(text_left, text_type_text))
     return new_nodes

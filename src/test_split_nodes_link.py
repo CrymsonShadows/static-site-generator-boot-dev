@@ -18,6 +18,16 @@ class TestSplitNodesLink(unittest.TestCase):
             ]
         )
 
+    def test_split_nodes_link_one_link_with_text_after(self):
+        node = TextNode("[link](https://www.example.com) and some text after", text_type_text)
+        self.assertEqual(
+            split_nodes_link([node]),
+            [
+                TextNode("link", text_type_link, "https://www.example.com"),
+                TextNode(" and some text after", text_type_text)
+            ]
+        )
+
     def test_split_nodes_link_two_links_in_text(self):
         node = TextNode(
             "This is text with a [link](https://www.example.com) and [another](https://www.example.com/another)",

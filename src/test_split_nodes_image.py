@@ -18,6 +18,16 @@ class TestSplitNodesImage(unittest.TestCase):
             ]
         )
 
+    def test_split_nodes_image_one_image_with_text_after(self):
+        node = TextNode("![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and more text", text_type_text)
+        self.assertEqual(
+            split_nodes_image([node]),
+            [
+                TextNode("image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+                TextNode(" and more text", text_type_text)
+            ]
+        )
+
     def test_split_nodes_image_two_images_in_text(self):
         node = TextNode(
             "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
