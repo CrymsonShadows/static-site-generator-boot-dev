@@ -14,7 +14,7 @@ def markdown_to_blocks(markdown: str):
 
 def block_to_block_type(block: str):
     # Heading
-    if block.startswith(("#", "##", "###", "####", "#####", "######")):
+    if block.startswith(("# ", "## ", "### ", "#### ", "##### ", "###### ")):
         return block_type_heading
     # Code
     if block.startswith("```") and block.endswith("```") and len(block) != 3:
