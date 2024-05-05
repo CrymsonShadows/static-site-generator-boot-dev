@@ -1,3 +1,6 @@
+from htmlnode import HTMLNode, ParentNode
+from textnode import TextNode, text_to_textnodes, text_node_to_html_node
+
 block_type_paragraph = "paragraph"
 block_type_heading = "heading"
 block_type_code = "code"
@@ -47,3 +50,9 @@ def block_to_block_type(block: str):
     if every_line_char_start == True:
         return block_type_ordered_list
     return block_type_paragraph
+
+def paragraph_block_to_html_node(block: str) -> HTMLNode:
+    text_nodes: list[TextNode] = text_to_textnodes(block)
+    html_nodes: list[HTMLNode] = map(text_node_to_html_node, text_nodes)
+    paragraph_html_node: ParentNode = ParentNode(tag="p", children=html_nodes)
+    return paragraph_html_node
