@@ -107,5 +107,12 @@ class TestBlockMarkdown(unittest.TestCase):
             expected_HTML_node.to_html()
         )
 
+    def test_paragraph_block_to_html_node_empty(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="p", children=[], props=None)
+        self.assertEqual(
+            paragraph_block_to_html_node("").to_html(),
+            expected_HTML_node.to_html()
+        )
+
 if __name__ == "__main__":
     unittest.main()
