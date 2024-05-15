@@ -1,5 +1,6 @@
 import unittest
-from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list
+from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list, paragraph_block_to_html_node
+from htmlnode import ParentNode, LeafNode
 
 class TestBlockMarkdown(unittest.TestCase):
     def test_markdown_to_blocks_empty(self):
@@ -97,6 +98,13 @@ class TestBlockMarkdown(unittest.TestCase):
         self.assertEqual(
             block_to_block_type("1. First item\n3.Second item"),
             block_type_paragraph
+        )
+
+    def test_paragraph_block_to_html_node(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="p", children=[LeafNode(None, "Hey")], props=None)
+        self.assertEqual(
+            paragraph_block_to_html_node("Hey").to_html(),
+            expected_HTML_node.to_html()
         )
 
 if __name__ == "__main__":
