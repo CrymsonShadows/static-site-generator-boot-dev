@@ -107,6 +107,13 @@ class TestBlockMarkdown(unittest.TestCase):
             expected_HTML_node.to_html()
         )
 
+    def test_blockquote_to_html_node_two_lines(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="blockquote", children=[LeafNode(tag=None, value="First line<br>Second line")], props=None)
+        self.assertEqual(
+            quote_block_to_html_node("> First line\n> Second line").to_html(),
+            expected_HTML_node.to_html()
+        )
+
     def test_paragraph_block_to_html_node(self):
         expected_HTML_node: ParentNode = ParentNode(tag="p", children=[LeafNode(None, "Hey")], props=None)
         self.assertEqual(
