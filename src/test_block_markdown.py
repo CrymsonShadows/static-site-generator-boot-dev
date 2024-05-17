@@ -1,5 +1,5 @@
 import unittest
-from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list, paragraph_block_to_html_node
+from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list, paragraph_block_to_html_node, quote_block_to_html_node
 from htmlnode import ParentNode, LeafNode
 
 class TestBlockMarkdown(unittest.TestCase):
@@ -98,6 +98,13 @@ class TestBlockMarkdown(unittest.TestCase):
         self.assertEqual(
             block_to_block_type("1. First item\n3.Second item"),
             block_type_paragraph
+        )
+
+    def test_blockquote_to_html_node(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="blockquote", children=[LeafNode(tag=None, value="This is within a blockquote")], props=None)
+        self.assertEqual(
+            quote_block_to_html_node("> This is within a blockquote").to_html(),
+            expected_HTML_node.to_html()
         )
 
     def test_paragraph_block_to_html_node(self):

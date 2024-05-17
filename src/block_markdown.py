@@ -12,7 +12,7 @@ def markdown_to_blocks(markdown: str):
     lines = markdown.split("\n\n")
     blocks: list[str] = []
     blocks = map(lambda line: line.strip(), lines)
-    blocks = list(filter(lambda block: not block == "", blocks))
+    blocks = list(filter(lambda block: block != "", blocks))
     return blocks
 
 def block_to_block_type(block: str):
@@ -50,6 +50,15 @@ def block_to_block_type(block: str):
     if every_line_char_start == True:
         return block_type_ordered_list
     return block_type_paragraph
+
+def quote_block_to_html_node(block: str) -> HTMLNode:
+    lines: str = block.splitlines()
+    lines = list(map(lambda line: line.lstrip("> "), lines))
+    cleaned_block = "<br>".join(lines)
+    text_nodes: list[TextNode] = text_to_textnodes(cleaned_block)
+    html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
+    quote_html_node: ParentNode = ParentNode(tag="blockquote", children=html_nodes, props=None)
+    return quote_html_node
 
 def paragraph_block_to_html_node(block: str) -> HTMLNode:
     text_nodes: list[TextNode] = text_to_textnodes(block)
