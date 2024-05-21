@@ -60,6 +60,18 @@ def quote_block_to_html_node(block: str) -> HTMLNode:
     quote_html_node: ParentNode = ParentNode(tag="blockquote", children=html_nodes, props=None)
     return quote_html_node
 
+def unordered_list_block_to_html_node(block: str) -> HTMLNode:
+    lines: str = block.splitlines()
+    lines = list(map(lambda line: line[2:], lines))
+    list_items: list[HTMLNode] = []
+    for line in lines:
+        text_nodes: list[TextNode] = text_to_textnodes(line)
+        html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
+        list_item: ParentNode = ParentNode(tag="li", children=html_nodes, props=None)
+        list_items.append(list_item)
+    unordered_list: ParentNode = ParentNode(tag="ul", children=list_items, props=None)
+    return unordered_list
+
 def paragraph_block_to_html_node(block: str) -> HTMLNode:
     text_nodes: list[TextNode] = text_to_textnodes(block)
     html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
