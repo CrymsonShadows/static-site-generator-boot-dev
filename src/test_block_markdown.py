@@ -1,5 +1,5 @@
 import unittest
-from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list, paragraph_block_to_html_node, quote_block_to_html_node
+from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list, paragraph_block_to_html_node, quote_block_to_html_node, unordered_list_block_to_html_node
 from htmlnode import ParentNode, LeafNode
 
 class TestBlockMarkdown(unittest.TestCase):
@@ -119,6 +119,34 @@ class TestBlockMarkdown(unittest.TestCase):
         self.assertEqual(
             quote_block_to_html_node("> First **BOLD**\n> Second line").to_html(),
             expected_HTML_node.to_html()
+        )
+
+    def test_unordered_list_to_html_node(self):
+        expected_html_node: ParentNode = ParentNode(
+            tag="ul",
+            children=[
+                ParentNode(tag="li", children=[LeafNode(tag=None, value="First")], props=None),
+                ParentNode(tag="li", children=[LeafNode(tag=None, value="Second")], props=None)
+            ],
+            props=None
+        )
+        self.assertEqual(
+            unordered_list_block_to_html_node("* First\n- Second").to_html(),
+            expected_html_node.to_html()
+        )
+        
+    def test_unordered_list_to_html_node_bold_inline_element(self):
+        expected_html_node: ParentNode = ParentNode(
+            tag="ul",
+            children=[
+                ParentNode(tag="li", children=[LeafNode(tag="b", value="BOLD")], props=None),
+                ParentNode(tag="li", children=[LeafNode(None, "Second")], props=None)
+            ],
+            props=None
+        )
+        self.assertEqual(
+            unordered_list_block_to_html_node("* **BOLD**\n* Second").to_html(),
+            expected_html_node.to_html()
         )
 
     def test_paragraph_block_to_html_node(self):
