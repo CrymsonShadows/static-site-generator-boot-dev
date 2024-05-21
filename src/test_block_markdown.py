@@ -94,7 +94,7 @@ class TestBlockMarkdown(unittest.TestCase):
             block_type_ordered_list
         )
 
-    def test_block_to_block_type_odered_list_out_of_order_lines(self):
+    def test_block_to_block_type_ordered_list_out_of_order_lines(self):
         self.assertEqual(
             block_to_block_type("1. First item\n3.Second item"),
             block_type_paragraph
@@ -114,6 +114,13 @@ class TestBlockMarkdown(unittest.TestCase):
             expected_HTML_node.to_html()
         )
 
+    def test_blockquote_to_html_node_bold_inline_elements(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="blockquote", children=[LeafNode(tag=None, value="First "), LeafNode(tag="b", value="BOLD"), LeafNode(tag=None, value="<br>Second line")], props=None)
+        self.assertEqual(
+            quote_block_to_html_node("> First **BOLD**\n> Second line").to_html(),
+            expected_HTML_node.to_html()
+        )
+
     def test_paragraph_block_to_html_node(self):
         expected_HTML_node: ParentNode = ParentNode(tag="p", children=[LeafNode(None, "Hey")], props=None)
         self.assertEqual(
@@ -125,6 +132,20 @@ class TestBlockMarkdown(unittest.TestCase):
         expected_HTML_node: ParentNode = ParentNode(tag="p", children=[], props=None)
         self.assertEqual(
             paragraph_block_to_html_node("").to_html(),
+            expected_HTML_node.to_html()
+        )
+
+    def test_paragraph_block_to_html_with_inline_bold_element(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="p", children=[LeafNode(None, "Hey "), LeafNode(tag="b", value="BOLD")], props=None)
+        self.assertEqual(
+            paragraph_block_to_html_node("Hey **BOLD**").to_html(),
+            expected_HTML_node.to_html()
+        )
+
+    def test_paragraph_block_to_html_with_inline_bold_italic_elements(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="p", children=[LeafNode(None, "Hey "), LeafNode(tag="b", value="BOLD"), LeafNode(None, " "), LeafNode(tag="i", value="ITALIC")], props=None)
+        self.assertEqual(
+            paragraph_block_to_html_node("Hey **BOLD** *ITALIC*").to_html(),
             expected_HTML_node.to_html()
         )
 
