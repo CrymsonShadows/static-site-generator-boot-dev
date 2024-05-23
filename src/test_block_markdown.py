@@ -1,5 +1,5 @@
 import unittest
-from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list, paragraph_block_to_html_node, quote_block_to_html_node, unordered_list_block_to_html_node, ordered_list_block_to_html_node
+from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list, paragraph_block_to_html_node, quote_block_to_html_node, unordered_list_block_to_html_node, ordered_list_block_to_html_node, code_block_to_html_node
 from htmlnode import ParentNode, LeafNode
 
 class TestBlockMarkdown(unittest.TestCase):
@@ -175,6 +175,27 @@ class TestBlockMarkdown(unittest.TestCase):
         self.assertEqual(
             ordered_list_block_to_html_node("1. **BOLD**\n2. Second").to_html(),
             expected_html_node.to_html()
+        )
+
+    def test_code_block_to_html_node(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="pre", children=[ParentNode(tag="code", children=[LeafNode(tag=None, value="This is within a code block")], props=None)], props=None)
+        self.assertEqual(
+            code_block_to_html_node("```This is within a code block```").to_html(),
+            expected_HTML_node.to_html()
+        )
+
+    def test_code_block_to_html_node_two_lines(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="pre", children=[ParentNode(tag="code", children=[LeafNode(tag=None, value="First line<br>Second line")], props=None)], props=None)
+        self.assertEqual(
+            code_block_to_html_node("```First line\nSecond line```").to_html(),
+            expected_HTML_node.to_html()
+        )
+
+    def test_code_block_to_html_node_bold_inline_elements(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="pre", children=[ParentNode(tag="code", children=[LeafNode(tag=None, value="First "), LeafNode(tag="b", value="BOLD"), LeafNode(tag=None, value="<br>Second line")], props=None)], props=None)
+        self.assertEqual(
+            code_block_to_html_node("```First **BOLD**\nSecond line```").to_html(),
+            expected_HTML_node.to_html()
         )
 
     def test_paragraph_block_to_html_node(self):

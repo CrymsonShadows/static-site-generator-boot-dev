@@ -84,6 +84,17 @@ def ordered_list_block_to_html_node(block: str) -> HTMLNode:
     ordered_list: ParentNode = ParentNode(tag="ol", children=list_items, props=None)
     return ordered_list
 
+def code_block_to_html_node(block: str) -> HTMLNode:
+    lines: str = block.splitlines()
+    lines = list(map(lambda line: line.lstrip("`"), lines))
+    lines = list(map(lambda line: line.rstrip("`"), lines))
+    cleaned_block = "<br>".join(lines)
+    text_nodes: list[TextNode] = text_to_textnodes(cleaned_block)
+    html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
+    code_html_node: ParentNode = ParentNode(tag="code", children=html_nodes, props=None)
+    pre_html_node: ParentNode = ParentNode(tag="pre", children=[code_html_node], props=None)
+    return pre_html_node
+
 def paragraph_block_to_html_node(block: str) -> HTMLNode:
     text_nodes: list[TextNode] = text_to_textnodes(block)
     html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
