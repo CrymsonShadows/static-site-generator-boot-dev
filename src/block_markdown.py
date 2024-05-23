@@ -72,6 +72,18 @@ def unordered_list_block_to_html_node(block: str) -> HTMLNode:
     unordered_list: ParentNode = ParentNode(tag="ul", children=list_items, props=None)
     return unordered_list
 
+def ordered_list_block_to_html_node(block: str) -> HTMLNode:
+    lines: str = block.splitlines()
+    lines = list(map(lambda line: line[line.find(".") + 2:], lines))
+    list_items: list[HTMLNode] = []
+    for line in lines:
+        text_nodes: list[TextNode] = text_to_textnodes(line)
+        html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
+        list_item: ParentNode = ParentNode(tag="li", children=html_nodes, props=None)
+        list_items.append(list_item)
+    ordered_list: ParentNode = ParentNode(tag="ol", children=list_items, props=None)
+    return ordered_list
+
 def paragraph_block_to_html_node(block: str) -> HTMLNode:
     text_nodes: list[TextNode] = text_to_textnodes(block)
     html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
