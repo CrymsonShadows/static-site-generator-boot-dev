@@ -1,5 +1,5 @@
 import unittest
-from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list, paragraph_block_to_html_node, quote_block_to_html_node, unordered_list_block_to_html_node, ordered_list_block_to_html_node, code_block_to_html_node
+from block_markdown import markdown_to_blocks, block_to_block_type, block_type_paragraph, block_type_heading, block_type_code, block_type_quote, block_type_unordered_list, block_type_ordered_list, paragraph_block_to_html_node, quote_block_to_html_node, unordered_list_block_to_html_node, ordered_list_block_to_html_node, code_block_to_html_node, heading_block_to_html_node
 from htmlnode import ParentNode, LeafNode
 
 class TestBlockMarkdown(unittest.TestCase):
@@ -198,6 +198,20 @@ class TestBlockMarkdown(unittest.TestCase):
             expected_HTML_node.to_html()
         )
 
+    def test_heading_block_to_html_node(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="h1", children=[LeafNode(None, "H1 Title")], props=None)
+        self.assertEqual(
+            heading_block_to_html_node("# H1 Title").to_html(),
+            expected_HTML_node.to_html()
+        )
+
+    def test_heading_block_to_html_node_bold_and_italic_elements(self):
+        expected_HTML_node: ParentNode = ParentNode(tag="h2", children=[LeafNode(tag="b", value="H2"), LeafNode(tag=None, value=" "), LeafNode(tag="i", value="Italic")], props=None)
+        self.assertEqual(
+            heading_block_to_html_node("## **H2** *Italic*").to_html(),
+            expected_HTML_node.to_html()
+        )
+        
     def test_paragraph_block_to_html_node(self):
         expected_HTML_node: ParentNode = ParentNode(tag="p", children=[LeafNode(None, "Hey")], props=None)
         self.assertEqual(

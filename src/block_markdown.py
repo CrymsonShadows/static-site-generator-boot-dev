@@ -95,6 +95,26 @@ def code_block_to_html_node(block: str) -> HTMLNode:
     pre_html_node: ParentNode = ParentNode(tag="pre", children=[code_html_node], props=None)
     return pre_html_node
 
+def heading_block_to_html_node(block: str) -> HTMLNode:
+    heading: str = ""
+    if block.startswith("######"):
+        heading = "h6"
+    elif block.startswith("#####"):
+        heading = "h5"
+    elif block.startswith("####"):
+        heading = "h4"
+    elif block.startswith("###"):
+        heading = "h3"
+    elif block.startswith("##"):
+        heading = "h2"
+    elif block.startswith("#"):
+        heading = "h1"
+    line: str = block.lstrip("# ")
+    text_nodes: list[TextNode] = text_to_textnodes(line)
+    html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
+    heading_html_node: ParentNode = ParentNode(tag=heading, children=html_nodes, props=None)
+    return heading_html_node
+
 def paragraph_block_to_html_node(block: str) -> HTMLNode:
     text_nodes: list[TextNode] = text_to_textnodes(block)
     html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
