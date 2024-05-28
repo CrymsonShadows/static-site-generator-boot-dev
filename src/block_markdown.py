@@ -8,7 +8,7 @@ block_type_quote = "quote"
 block_type_unordered_list = "unordered_list"
 block_type_ordered_list = "ordered_list"
 
-def markdown_to_blocks(markdown: str):
+def markdown_to_blocks(markdown: str) -> list[str]:
     lines = markdown.split("\n\n")
     blocks: list[str] = []
     blocks = map(lambda line: line.strip(), lines)
@@ -120,3 +120,23 @@ def paragraph_block_to_html_node(block: str) -> HTMLNode:
     html_nodes: list[HTMLNode] = list(map(text_node_to_html_node, text_nodes))
     paragraph_html_node: ParentNode = ParentNode(tag="p", children=html_nodes, props=None)
     return paragraph_html_node
+
+def markdown_to_html_node(markdown: str) -> HTMLNode:
+    blocks: list[str] = markdown_to_blocks(markdown)
+    block_html_nodes: list[HTMLNode] = []
+    for block in blocks:
+        block_type: str = block_to_block_type(block)
+        if block_type == block_type_quote:
+            block_html_nodes.append(quote_block_to_html_node(block))
+        elif block_type == block_type_unordered_list:
+            block_html_nodes.append(unordered_list_block_to_html_node(block))
+        elif block_type == block_type_ordered_list:
+            block_html_nodes.append(ordered_list_block_to_html_node(block))
+        elif block_type == block_type_code:
+            block_html_nodes.append(code_block_to_html_node(block))
+        elif block_type == block_type_heading:
+            block_html_nodes.append(heading_block_to_html_node(block))
+        else:
+            block_html_nodes.append(paragraph_block_to_html_node(block))
+    root: HTMLNode = ParentNode(tag="div", children=block_html_nodes, props=None)
+    return root
