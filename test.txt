@@ -1,2 +1,0 @@
-Expected: HTMLNode(tag: p, value: None, children: [HTMLNode(tag: None, value: Hey, children: None, props: None)], props: None)
-Actual: HTMLNode(tag: p, value: None, children: [HTMLNode(tag: None, value: Hey, children: None, props: None)], props: None)
