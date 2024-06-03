@@ -1,7 +1,8 @@
-from textnode import TextNode
+from copy_static import copy_static
+
+
 
 def main():
-    text_node = TextNode("This is a text node", "italics", "https://google.com")
-    print(text_node)
+    copy_static()
 
 main()
