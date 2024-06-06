@@ -86,6 +86,10 @@ def ordered_list_block_to_html_node(block: str) -> HTMLNode:
 
 def code_block_to_html_node(block: str) -> HTMLNode:
     lines: str = block.splitlines()
+    if lines[0] == "```\n" or lines[0] == "```":
+        lines = lines[1:]
+    if lines[len(lines) - 1] == "```":
+        lines = lines[:-1]
     lines = list(map(lambda line: line.lstrip("`"), lines))
     lines = list(map(lambda line: line.rstrip("`"), lines))
     cleaned_block = "<br>".join(lines)
